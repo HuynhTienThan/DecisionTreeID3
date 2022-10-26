@@ -117,10 +117,28 @@ class DecisionTreeID3(object):
             
         return labels
 
+# if __name__ == "__main__":
+#     df = pd.read_csv('weather.csv', index_col = 0, parse_dates = True)
+#     X = df.iloc[:, :-1]
+#     y = df.iloc[:, -1]
+#     tree = DecisionTreeID3(max_depth = 3, min_samples_split = 2)
+#     tree.fit(X, y)
+#     # print(tree.predict(X))
+#     print(df)
 if __name__ == "__main__":
-    df = pd.read_csv('weather.csv', index_col = 0, parse_dates = True)
-    X = df.iloc[:, :-1]
-    y = df.iloc[:, -1]
-    tree = DecisionTreeID3(max_depth = 3, min_samples_split = 2)
-    tree.fit(X, y)
-    print(tree.predict(X))
+    df = pd.read_csv('train.csv', index_col = 0, parse_dates = True)
+    mean=df['SalePrice'].mean()
+    df.loc[df['SalePrice']>=mean,"KQ"]="Cao"
+    df.loc[df['SalePrice']<mean,"KQ"]="Thấp"
+    del df['SalePrice']
+    test = pd.read_csv('test.csv', index_col = 0, parse_dates = True)
+    train=df.iloc[:,:-1]
+    target=df.iloc[:, -1]
+    tree = DecisionTreeID3(max_depth = 50, min_samples_split = 49)
+    tree.fit(train, target)
+    print(tree.predict(train))
+    # sample_submission = pd.read_csv('sample_submission.csv', index_col = 0, parse_dates = True)
+    # sample_submission.loc[sample_submission['SalePrice']<mean]="Thấp"
+    # sample_submission.loc[sample_submission['SalePrice']>=mean]="Cao"
+    # print(sample_submission)
+   
